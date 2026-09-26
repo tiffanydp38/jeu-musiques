@@ -3,10 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeu musical</title>
+  <title>Jeu musical 🎵</title>
+
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #reader {
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
+
 <body>
+
   <h1>🎵 Jeu musical</h1>
-  <p>Scanner un QR code pour commencer</p>
+  <p>Scanne le QR code de la chanson</p>
+
+  <div id="reader"></div>
+
+  <div id="result"></div>
+
+  <script>
+    function onScanSuccess(decodedText) {
+      document.getElementById("result").innerHTML =
+        "QR détecté ! 🎵<br><br>" +
+        "Lien : " + decodedText;
+
+      // Pour l'instant, on affiche simplement
+      // le lien détecté.
+      console.log(decodedText);
+    }
+
+    const scanner = new Html5QrcodeScanner(
+      "reader",
+      {
+        fps: 10,
+        qrbox: { width: 250, height: 250 }
+      },
+      false
+    );
+
+    scanner.render(onScanSuccess);
+  </script>
+
 </body>
 </html>
