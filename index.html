@@ -42,14 +42,34 @@
 
   <script>
     function onScanSuccess(decodedText) {
-      document.getElementById("result").innerHTML =
-        "QR détecté ! 🎵<br><br>" +
-        "Lien : " + decodedText;
+  try {
+    const url = new URL(decodedText);
 
-      // Pour l'instant, on affiche simplement
-      // le lien détecté.
-      console.log(decodedText);
+    // On transforme automatiquement le lien Apple Music
+    // en lien d'intégration.
+    if (url.hostname === "music.apple.com") {
+      url.hostname = "embed.music.apple.com";
     }
+
+    const embedUrl = url.toString();
+
+    document.getElementById("result").innerHTML = `
+      <h2>🎵 Écoute l'extrait</h2>
+      <iframe
+        allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+        frameborder="0"
+        height="175"
+        style="width:100%; max-width:660px; overflow:hidden; background:transparent;"
+        sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+        src="${embedUrl}">
+      </iframe>
+    `;
+
+  } catch (error) {
+    document.getElementById("result").innerHTML =
+      "Impossible de lire ce QR code.";
+  }
+}
 
     const scanner = new Html5QrcodeScanner(
       "reader",
